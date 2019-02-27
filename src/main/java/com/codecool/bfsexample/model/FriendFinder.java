@@ -12,57 +12,6 @@ public class FriendFinder {
 
     }
 
-    public int getDistanceBetween(long idFrom, long idTo) {
-
-        UserNode activeNode = getNodeById(idFrom);
-        int distance = 1;
-        int sumOfFriendsInNextDistance = 0;
-        List<UserNode> nodesVisited = new LinkedList<>();
-        nodesVisited.add(activeNode);
-        List<UserNode> nodesToVisit = new LinkedList<>();
-        nodesToVisit.addAll(activeNode.getFriends());
-        int friendsRemainingInDistance = nodesToVisit.size();
-
-        while (nodesToVisit.size() > 0) {
-
-            if (friendsRemainingInDistance == 0) {
-                friendsRemainingInDistance = sumOfFriendsInNextDistance;
-                distance++;
-                sumOfFriendsInNextDistance = 0;
-            }
-
-            activeNode = ((LinkedList<UserNode>) nodesToVisit).getFirst();
-            ((LinkedList<UserNode>) nodesToVisit).remove(activeNode);
-            nodesVisited.add(activeNode);
-            if (activeNode.getId() == idTo) {
-                    return distance;
-                }
-
-            List<UserNode> friendsOfActiveNode = new ArrayList<>();
-            friendsOfActiveNode.addAll(activeNode.getFriends());
-            for (UserNode user: friendsOfActiveNode
-                 ) {
-
-
-
-                if (!user.isIn(nodesToVisit) && !user.isIn(nodesVisited)) {
-
-                    nodesToVisit.add(user);
-                    sumOfFriendsInNextDistance++;
-
-                }
-
-            }
-
-            friendsRemainingInDistance--;
-
-        }
-
-        throw new IllegalArgumentException("The users don't have common friends or the ids don't exist");
-
-
-    }
-
     public UserNode getNodeById(long id) {
 
         for (UserNode user: users
