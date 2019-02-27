@@ -108,4 +108,26 @@ public class FriendFinder {
 
     }
 
+    public List<UserNode> getFriendsOfFriendsAtDistance(long idFrom, int distance) {
+
+        List<List<UserNode>> bFSResult = breadthFirstSearch(idFrom);
+        List<UserNode> friendsOfFriends = new LinkedList<>();
+
+        for (int i = 1; i <= distance; i++) {
+
+            List<UserNode> currentList = bFSResult.get(i);
+
+            for (UserNode user: currentList
+                 ) {
+
+                friendsOfFriends.add(user);
+
+            }
+
+        }
+
+        return friendsOfFriends;
+
+    }
+
 }
