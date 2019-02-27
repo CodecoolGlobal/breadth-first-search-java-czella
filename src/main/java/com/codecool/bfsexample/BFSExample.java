@@ -21,8 +21,9 @@ public class BFSExample {
         List<UserNode> users = populateDB();
         System.out.println(users);
         FriendFinder friendFinder = new FriendFinder(users);
-        System.out.println("The distance between the nodes is: " + friendFinder.getDistanceBetweenIndexes(1,114));
-        System.out.println("The friends of friends in a given distance are: " + friendFinder.getFriendsOfFriendsAtDistance(1,1));
+        System.out.println("The distance between the nodes is: " + friendFinder.getDistanceBetweenIndexes(28,92));
+        System.out.println("The friends of friends in a given distance are: " + friendFinder.getFriendsOfFriendsAtDistance(1,5));
+        System.out.println("The shortest routes are the following: " + friendFinder.getShortestRoutesBetween(28,92));
 
     }
 }

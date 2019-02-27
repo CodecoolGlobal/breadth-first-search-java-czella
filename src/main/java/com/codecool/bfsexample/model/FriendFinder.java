@@ -130,4 +130,68 @@ public class FriendFinder {
 
     }
 
+    public List<List<UserNode>> getShortestRoutesBetween(long idFrom, long idTo) {
+
+
+        List<List<UserNode>> bFSResult = breadthFirstSearch(idFrom);
+        List<List<UserNode>> shortestRoutes = new LinkedList<>();
+
+        UserNode fromNode = getNodeById(idFrom);
+        UserNode toNode = getNodeById(idTo);
+
+        int distanceBetween = getDistanceBetweenIndexes(idFrom,idTo);
+        if (distanceBetween < 2) {
+            throw new IllegalArgumentException("The nodes are adjacent!");
+        }
+
+        List<Route> routesToExplore = new LinkedList<>();
+
+        int distanceModifier = 1;
+
+        for (UserNode user:bFSResult.get(distanceBetween - distanceModifier)
+             ) {
+            List<UserNode> friendsOfActiveNode = new ArrayList<>();
+            friendsOfActiveNode.addAll(user.getFriends());
+            if (toNode.isIn(friendsOfActiveNode)) {
+
+                routesToExplore.add(new Route(toNode, user));
+
+            }
+        }
+        distanceModifier++;
+        int routesRemainingOnCurrentLevel = routesToExplore.size();
+        int routesOnNextLevel = 0;
+        while (routesToExplore.size() > 0 && distanceBetween-distanceModifier > 0) {
+            if (routesRemainingOnCurrentLevel == 0) {
+
+                routesRemainingOnCurrentLevel = routesOnNextLevel;
+                routesOnNextLevel = 0;
+                distanceModifier++;
+            }
+            Route currentRoute = ((LinkedList<Route>) routesToExplore).getFirst();
+            UserNode currentUserToCheck = currentRoute.peekAtLastNode();
+            for (UserNode user:bFSResult.get(distanceBetween - distanceModifier)
+            ) {
+                List<UserNode> friendsOfActiveNode = new ArrayList<>();
+                friendsOfActiveNode.addAll(user.getFriends());
+                if (currentUserToCheck.isIn(friendsOfActiveNode)) {
+
+                    routesToExplore.add(new Route(currentRoute, user));
+                    routesOnNextLevel++;
+                }
+            }
+            ((LinkedList<Route>) routesToExplore).remove(currentRoute);
+            routesRemainingOnCurrentLevel--;
+
+        }
+
+        for (Route route:routesToExplore
+             ) {
+            shortestRoutes.add(route.getRouteNodes());
+        }
+
+        return shortestRoutes;
+
+    }
+
 }
